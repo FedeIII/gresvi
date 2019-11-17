@@ -21,7 +21,8 @@
   "dependencies": {
     "github-api": "^3.3.0",
     "react": "^16.10.2",
-    "react-dom": "^16.10.2"
+    "react-dom": "^16.10.2",
+    "react-three-fiber": "^3.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
