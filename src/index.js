@@ -1,8 +1,11 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+
 import ReactDOM from 'react-dom';
 import React, { useRef, useEffect } from 'react';
-import { Canvas, useFrame } from 'react-three-fiber';
+import { Canvas, extend, useThree, useFrame } from 'react-three-fiber';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
 import GitHub from 'github-api';
 import styled from 'styled-components';
 
@@ -32,7 +35,7 @@ async function getFiles(commits) {
 
 (async function() {
   gh = new GitHub({
-    token: '125a1453c719883490eae62e3636447c478104e9',
+    token: 'TOKEN',
   });
 
   repository = gh.getRepo('FedeIII', 'hidden-agenda');
@@ -69,6 +72,30 @@ function Cube({ color, position }) {
   );
 }
 
+// CONTROLS
+
+extend({ OrbitControls });
+
+function Controls() {
+  const controlsRef = useRef();
+  const { camera, gl } = useThree();
+
+  useFrame(() => controlsRef.current && controlsRef.current.update());
+
+  return (
+    <orbitControls
+      ref={controlsRef}
+      args={[camera, gl.domElement]}
+      enableRotate
+      enablePan={false}
+      maxDistance={100}
+      minDistance={5}
+      minPolarAngle={Math.PI / 6}
+      maxPolarAngle={Math.PI / 2}
+    />
+  );
+}
+
 // CANVAS
 
 const StyledCanvas = styled(Canvas)`
@@ -81,28 +108,22 @@ const StyledCanvas = styled(Canvas)`
 `;
 
 function ResponsiveCanvas({ children }) {
-  const ref = useRef();
-  let aspect = 16 / 9;
+  // const ref = useRef();
 
-  useEffect(() => {
-    aspect = ref.clientWidth / ref.clientHeight;
-  }, []);
+  // useEffect(() => {
+  //   aspect = ref.clientWidth / ref.clientHeight;
+  // }, []);
 
   const camera = {
     fov: 75,
-    aspect: 1,
     near: 0.1,
     far: 1000,
-    aspect,
+    aspect: 1,
   };
 
   // useFrame(() => camera.updateProjectionMatrix());
 
-  return (
-    <StyledCanvas ref={ref} camera={camera}>
-      {children}
-    </StyledCanvas>
-  );
+  return <StyledCanvas camera={camera}>{children}</StyledCanvas>;
 }
 
 function App() {
@@ -112,6 +133,7 @@ function App() {
       <Cube color="#8844aa" position={[-2, 1, 1]} />
       <Cube color="#aa8844" position={[2, 1, 1]} />
       <directionalLight color="#FFFFFF" intensity={1} position={[-1, 2, 4]} />
+      <Controls />
     </ResponsiveCanvas>
   );
 }

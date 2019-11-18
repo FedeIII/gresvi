@@ -22,7 +22,8 @@
     "github-api": "^3.3.0",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "react-three-fiber": "^3.0.3"
+    "react-three-fiber": "^3.0.3",
+    "three": "^0.110.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
