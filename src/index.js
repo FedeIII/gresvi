@@ -8,6 +8,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import GitHub from 'github-api';
 import styled from 'styled-components';
+import './styles';
 
 // GITHUB
 
@@ -35,7 +36,7 @@ async function getFiles(commits) {
 
 (async function() {
   gh = new GitHub({
-    token: 'TOKEN',
+    token: process.env.GITHUB_TOKEN,
   });
 
   repository = gh.getRepo('FedeIII', 'hidden-agenda');
@@ -50,7 +51,7 @@ async function getFiles(commits) {
 
 function Cube({ color, position }) {
   const ref = useRef();
-  let rotationSpeed = 0.04;
+  let rotationSpeed;
   useEffect(() => {
     rotationSpeed = 0.04 * Math.random();
   }, []);
@@ -102,23 +103,23 @@ const StyledCanvas = styled(Canvas)`
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
+  height: 400px;
   width: 100%;
   background-color: slategray;
 `;
 
 function ResponsiveCanvas({ children }) {
-  // const ref = useRef();
-
+  const ref = useRef();
+  // let aspect;
   // useEffect(() => {
-  //   aspect = ref.clientWidth / ref.clientHeight;
+  //   aspect = ref.current.clientWidth / ref.current.clientHeight;
   // }, []);
 
   const camera = {
     fov: 75,
     near: 0.1,
     far: 1000,
-    aspect: 1,
+    // aspect: 16 / 9,
   };
 
   // useFrame(() => camera.updateProjectionMatrix());
